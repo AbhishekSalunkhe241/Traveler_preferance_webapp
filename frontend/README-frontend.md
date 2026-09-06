@@ -34,7 +34,7 @@ All frontend services communicate through a **single adapter interface** in `src
 ```typescript
 // src/services/api.service.ts
 export const USE_MOCK = true; // Set to false to route to real backend endpoints
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
 ```
 
 Every service method is cleanly annotated with `// MOCK — replace with API call to <endpoint>` so backend integration is effortless:

@@ -139,6 +139,20 @@ Frontend talks to Backend → Backend talks to ML Service.
 
 ## Troubleshooting
 
+### Vercel shows `{"detail":"Not Found"}` or `Route GET / not found`
+
+These responses are from the Express backend, not the React application. In the Vercel project settings, set **Root Directory** to `frontend`. Do not deploy from the repository root or point the project at `backend/src/server.ts`.
+
+Use these exact frontend settings:
+
+- **Framework Preset**: Vite
+- **Root Directory**: `frontend`
+- **Install Command**: `npm install`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+
+The frontend's `vercel.json` is loaded because the project root is `frontend`. The backend remains a separate service.
+
 ### "Module not found" on Vercel
 → Make sure `Root Directory` is set to `frontend` (not the repo root).
 
