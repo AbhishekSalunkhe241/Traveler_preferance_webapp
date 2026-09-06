@@ -28,9 +28,10 @@ const activities: Activity[] = [
 ];
 
 export const demoActivities = activities;
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api/v1').replace(/\/+$/, '');
 
 async function loadActivities(token: string): Promise<Activity[]> {
-  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/ml/activities`, {
+  const response = await fetch(`${API_BASE_URL}/ml/activities`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!response.ok) throw new Error(`Catalog request failed (${response.status})`);
@@ -56,7 +57,7 @@ export async function optimizeTrip(input: {
     // Keep the demo catalog available when the database is not running locally.
   }
 
-  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/ml/optimize`, {
+  const response = await fetch(`${API_BASE_URL}/ml/optimize`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${input.token}` },
     body: JSON.stringify({

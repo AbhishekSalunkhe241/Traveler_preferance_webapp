@@ -16,7 +16,7 @@ import { reconcileDisruptionPricing } from '../utils/pricing.util';
 // SINGLE ADAPTER SWITCH POINT
 // When false, routes to real backend API endpoints.
 export const USE_MOCK = true;
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api/v1').replace(/\/+$/, '');
 
 // Local storage key for persistent prototype state across page refreshes
 const STORAGE_KEY_ITINERARY = 'codenova_active_itinerary_v2';

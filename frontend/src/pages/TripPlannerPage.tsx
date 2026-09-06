@@ -26,7 +26,7 @@ export const TripPlannerPage: React.FC<TripPlannerPageProps> = ({ onNavigateToOp
       const feasStatus = await itineraryService.checkFeasibility(extracted);
       setFeasibility(feasStatus);
 
-      const apiBase = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+      const apiBase = (import.meta.env.VITE_API_BASE_URL || '/api/v1').replace(/\/+$/, '');
       const tokenResponse = await fetch(`${apiBase}/auth/dev-token`);
       if (!tokenResponse.ok) throw new Error('Unable to authenticate with the local backend.');
       const tokenPayload = await tokenResponse.json();

@@ -32,23 +32,7 @@ git push -u origin main
 
 ---
 
-## Step 2 — Deploy ML Service on Railway (FIRST)
-
-The backend depends on the ML service URL, so deploy this first.
-
-1. Go to https://railway.app/new
-2. Click **Deploy from GitHub repo** → select `CodeNova`
-3. When prompted for **Root Directory**, click **Variables** first
-4. Click **Settings** → set **Root Directory** to `ai-ml/pipeline_service`
-5. Click **Deploy**
-6. Wait for build to complete (~3-5 min — installs LightGBM, OR-Tools)
-7. Once deployed, click **Settings** → **Networking** → **Generate Domain**
-8. Copy the URL — it will look like `https://codenova-ml-production.up.railway.app`
-9. Test it: open `https://YOUR-ML-URL/health` — should return `{"status":"healthy"}`
-
----
-
-## Step 3 — Deploy Backend on Railway
+## Step 2 — Deploy Backend on Railway
 
 1. Go to https://railway.app/new → **Deploy from GitHub repo** → `CodeNova`
 2. **Root Directory** → `backend`
@@ -57,7 +41,7 @@ The backend depends on the ML service URL, so deploy this first.
 ```
 NODE_ENV=production
 PORT=5000
-ML_SERVICE_URL=https://YOUR-ML-URL-FROM-STEP-2
+ML_SERVICE_URL=https://YOUR-ML-URL-FROM-STEP-3
 ML_SERVICE_TIMEOUT_MS=30000
 ANTHROPIC_AUTH_TOKEN=your_openrouter_key_here
 ANTHROPIC_BASE_URL=https://openrouter.ai/api
@@ -69,6 +53,18 @@ FRONTEND_URL=https://codenova.vercel.app
 4. Click **Deploy** (~1-2 min)
 5. **Settings** → **Networking** → **Generate Domain**
 6. Test: `https://YOUR-BACKEND-URL/api/v1/health` → `{"success":true,...}`
+
+Railway uses `npm run build` as the build command and `npm start` as the start command.
+
+---
+
+## Step 3 — Deploy ML Service on Railway
+
+1. Deploy the same GitHub repository as a separate Railway service.
+2. Set **Root Directory** to `ai-ml/pipeline_service`.
+3. Railway uses `requirements.txt` and starts `uvicorn main:app --host 0.0.0.0 --port $PORT`.
+4. Generate a public domain and test `https://YOUR-ML-URL/health`.
+5. Set the backend `ML_SERVICE_URL` variable to that public ML URL, then redeploy the backend.
 
 ---
 
@@ -152,6 +148,7 @@ Use these exact frontend settings:
 - **Output Directory**: `dist`
 
 The frontend's `vercel.json` is loaded because the project root is `frontend`. The backend remains a separate service.
+This app uses internal state navigation rather than React Router, so no catch-all rewrite is needed; this also prevents API requests from being served `index.html`.
 
 ### "Module not found" on Vercel
 → Make sure `Root Directory` is set to `frontend` (not the repo root).
